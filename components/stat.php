@@ -1,15 +1,30 @@
 <?php
 
 //  Stats Section
-$stats_sql = "SELECT * FROM contents WHERE name='Stats Section'";
-$stats_result = $conn->query($stats_sql);
-print_r($stats_result);
-$stats = $stats_result->fetch_assoc();
+// $stats_sql = "SELECT * FROM contents WHERE name='Stats Section'";
+// $stats_result = $conn->query($stats_sql);
+// // print_r($stats_result);
+// $stats = $stats_result->fetch_assoc();
 
-$stats_sub_sql = "SELECT * FROM subcontents WHERE content_id={$stats['id']} ORDER BY sort_order";
+
+
+// echo "<section class='stats-section'>";
+
+$contents = include("api/content.php"); // include the above file
+
+
+$selectedContent = null;
+
+foreach ($contents as $content) {
+    if ($content['name'] === 'Stats Section') {
+        $selectedContent = $content;
+        break;
+    }
+}
+
+$stats_sub_sql = "SELECT * FROM subcontents WHERE content_id={$selectedContent['id']} ORDER BY sort_order";
 $stats_sub_result = $conn->query($stats_sub_sql);
 
-echo "<section class='stats-section'>";
 
 while ($sub = $stats_sub_result->fetch_assoc()) {
     $attr_sql = "SELECT * FROM attributes WHERE subcontent_id={$sub['id']}";
@@ -37,6 +52,9 @@ while ($sub = $stats_sub_result->fetch_assoc()) {
         echo "</div>";
     }
 }
+
+
+
 echo "</section>";
 
 

@@ -18,15 +18,11 @@ include('db.php');
 
     // Navbar Section 
     
-    include("<components/Nav.php");
+    include("components/Nav.php");
 
     // Hero Section 
     
     include("components/hero.php");
-
-    // echo "<br>";
-    // echo "<br>";
-    // echo "<br>";
     
 
     // Stats Section 

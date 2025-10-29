@@ -6,7 +6,7 @@
 // Fetch its subcontents
 $sub_sql = "SELECT * FROM subcontents WHERE content_id='3'   ORDER BY sort_order";
 $subs = $conn->query($sub_sql);
-print_r($subs);
+// print_r($subs);
 
 if ($subs->num_rows == 0) {
     echo "<p>❌ No subcontents found for Navbar (content_id = {$content['id']}).</p>";

@@ -1,15 +1,40 @@
 <?php
 
-// Step 1: Fetch the main content
-$content_sql = "SELECT * FROM contents WHERE id='1'";
-$content_result = $conn->query($content_sql);
-echo "Printing Something";
-print_r($content_result);
-$content = $content_result->fetch_assoc();
+
+$contents = include("api/content.php"); // include the above file
+
+
+
+// // Step 1: Fetch the main content
+// $content_sql = "SELECT * FROM contents WHERE id='1'";
+// $content_result = $conn->query($content_sql);
+// // echo "Printing Something";
+// // print_r($content_result);
+// $content = $content_result->fetch_assoc();
+// echo "Printing the reslult ";
+// print_r($content);
+
+
+$selectedContent = null;
+
+foreach ($contents as $content) {
+    if ($content['name'] === 'Hero Section') {
+        $selectedContent = $content;
+        break;
+    }
+}
+
+
 
 // Step 2: Fetch subcontents
-$sub_sql = "SELECT * FROM subcontents WHERE content_id={$content['id']} ORDER BY sort_order";
+// $sub_sql = "SELECT * FROM subcontents WHERE content_id={$content['id']} ORDER BY sort_order";
+// $sub_result = $conn->query($sub_sql);
+
+$sub_sql = "SELECT * FROM subcontents WHERE content_id={$selectedContent['id']} ORDER BY sort_order";
 $sub_result = $conn->query($sub_sql);
+
+echo "again priniting ";
+print_r($sub_result);
 
 
 while ($sub = $sub_result->fetch_assoc()) {
@@ -18,6 +43,8 @@ while ($sub = $sub_result->fetch_assoc()) {
     // Fetch attributes
     $attr_sql = "SELECT * FROM attributes WHERE subcontent_id={$sub['id']}";
     $attr_result = $conn->query($attr_sql);
+    // echo "Do Something ";
+    // print_r($attr_result);
 
     $attrs = [];
     while ($row = $attr_result->fetch_assoc()) {
