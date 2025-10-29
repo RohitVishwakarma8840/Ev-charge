@@ -1,0 +1,31 @@
+
+
+.section {
+  margin: 10px 20px;
+  text-align: center;
+}
+
+.text h1 {
+  color: #008000;
+}
+
+.section-body{
+    display:flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    
+}
+
+.section-body-thing{
+    display: flex;
+    flex-direction: column;
+
+}
+.qr img {
+  width: 150px;
+}
+
+.image img {
+  width: 350px;
+  border-radius: 10px;
+}
