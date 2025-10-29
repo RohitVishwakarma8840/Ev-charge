@@ -1,0 +1,91 @@
+3 tables => db 
+
+content table 
+subcontent 
+subcontent -attribute 
+
+
+
+
+CREATE TABLE contents (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  description TEXT
+);
+
+
+CREATE TABLE subcontents (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  content_id INT,
+  title VARCHAR(255),
+  type VARCHAR(50),
+  sort_order INT,
+  FOREIGN KEY (content_id) REFERENCES contents(id)
+);
+
+
+CREATE TABLE attributes (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  subcontent_id INT,
+  attribute_name VARCHAR(100),
+  attribute_value TEXT,
+  FOREIGN KEY (subcontent_id) REFERENCES subcontents(id)
+);
+
+
+
+
+
+.section {
+  margin: 10px 20px;
+  text-align: center;
+}
+
+.text h1 {
+  color: #008000;
+}
+
+.section-body{
+    display:flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    
+}
+
+.section-body-thing{
+    display: flex;
+    flex-direction: column;
+
+}
+
+.stat-card{
+    max-width: 100vw;
+    box-sizing: border-box;
+    /* display:flex; */
+    /* flex-wrap: wrap; */
+    
+}
+
+.stat-card img {
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 10px;
+}
+
+
+.stats-container{
+    display: flex;
+    background-color: #F5F5F5;
+}
+
+.qr img {
+  width: 150px;
+}
+
+.image img {
+  width: 350px;
+  border-radius: 10px;
+}
+
