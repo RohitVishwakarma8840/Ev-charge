@@ -55,5 +55,5 @@ $response = [
 
 // Output as JSON
 echo json_encode($response, JSON_PRETTY_PRINT);
-echo "it was printed";
+// echo "it was printed";
 ?>
