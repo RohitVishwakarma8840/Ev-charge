@@ -1,21 +1,36 @@
 <?php
+include("db.php"); // ensure DB connection
+$contents = include("api/content.php"); // fetch id & name list from database
 
+// Step 1: Find Navbar content
+$selectedContent = null;
+foreach ($contents as $content) {
+    if ($content['name'] === 'Navbar') {
+        $selectedContent = $content;
+        break;
+    }
+}
 
+if (!$selectedContent) {
+    echo "<p>❌ Navbar content not found.</p>";
+    exit;
+}
 
+// Step 2: Fetch subcontents for Navbar
+$nav_sub_sql = "SELECT * FROM subcontents WHERE content_id={$selectedContent['id']} ORDER BY sort_order";
+$sub_result = $conn->query($nav_sub_sql);
 
-// Fetch its subcontents
-$sub_sql = "SELECT * FROM subcontents WHERE content_id='3'   ORDER BY sort_order";
-$subs = $conn->query($sub_sql);
-// print_r($subs);
-
-if ($subs->num_rows == 0) {
-    echo "<p>❌ No subcontents found for Navbar (content_id = {$content['id']}).</p>";
+if ($sub_result->num_rows == 0) {
+    echo "<p>❌ No subcontents found for Navbar (content_id = {$selectedContent['id']}).</p>";
     exit;
 }
 
 echo "<nav class='navbar'>";
 
-while ($sub = $subs->fetch_assoc()) {
+// Step 3: Loop through subcontents
+while ($sub = $sub_result->fetch_assoc()) {
+
+    // Fetch attributes for this subcontent
     $attr_sql = "SELECT * FROM attributes WHERE subcontent_id={$sub['id']}";
     $attr_result = $conn->query($attr_sql);
 
@@ -24,7 +39,7 @@ while ($sub = $subs->fetch_assoc()) {
         $attrs[$row['attribute_name']] = stripslashes($row['attribute_value']);
     }
 
-
+    // Step 4: Render based on subcontent type
     if ($sub['type'] == 'logo') {
         echo "<div class='logo'>";
         echo "<a href='{$attrs['link']}'><img src='{$attrs['logo_image']}' alt='Logo'></a>";
@@ -32,12 +47,10 @@ while ($sub = $subs->fetch_assoc()) {
         echo "</div>";
     }
 
-
     if ($sub['type'] == 'menu') {
-        $jsonStr = $attrs['menu_items'];
+        $jsonStr = $attrs['menu_items'] ?? '';
         $items = json_decode($jsonStr, true);
 
-        // Debug: show if JSON is invalid
         if ($items === null) {
             echo "<p>❌ JSON decode error: " . json_last_error_msg() . "</p>";
             echo "<pre>$jsonStr</pre>";
@@ -47,7 +60,8 @@ while ($sub = $subs->fetch_assoc()) {
         echo "<ul class='menu'>";
         foreach ($items as $item) {
             $highlight = isset($item['highlight']) ? "class='highlight'" : "";
-            if (isset($item['dropdown'])) {
+
+            if (isset($item['dropdown']) && is_array($item['dropdown'])) {
                 echo "<li class='dropdown'><a href='{$item['link']}'>" . $item['label'] . "</a>";
                 echo "<ul class='dropdown-menu'>";
                 foreach ($item['dropdown'] as $d) {
@@ -63,8 +77,4 @@ while ($sub = $subs->fetch_assoc()) {
 }
 
 echo "</nav>";
-
-
-
-
 ?>

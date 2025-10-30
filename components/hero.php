@@ -34,7 +34,7 @@ $sub_sql = "SELECT * FROM subcontents WHERE content_id={$selectedContent['id']} 
 $sub_result = $conn->query($sub_sql);
 
 echo "again priniting ";
-print_r($sub_result);
+// print_r($sub_result);
 
 
 while ($sub = $sub_result->fetch_assoc()) {
