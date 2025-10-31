@@ -89,3 +89,78 @@ CREATE TABLE attributes (
   border-radius: 10px;
 }
 
+
+
+
+
+
+<?php
+include("../db.php");
+
+$sql = "SELECT * FROM events ORDER BY event_date DESC";
+$result = $conn->query($sql);
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>All Events</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th, td {
+      padding: 8px 12px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+    .badge {
+      padding: 4px 8px;
+      border-radius: 5px;
+      color: #fff;
+      font-size: 12px;
+    }
+    .meet { background: #007bff; }
+    .humla { background: #28a745; }
+    .workshop { background: #ffc107; color: #000; }
+    .archive { background: #ff5722; }
+  </style>
+</head>
+<body>
+
+<h2>Upcoming Events</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Event Type</th>
+      <th>Event</th>
+      <th>Location</th>
+      <th>Sessions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr>";
+            echo "<td>" . $row['event_date'] . "</td>";
+            echo "<td><span class='badge " . strtolower($row['event_type']) . "'>" . $row['event_type'] . "</span></td>";
+            echo "<td>" . $row['title'] . "</td>";
+            echo "<td>" . $row['location'] . "</td>";
+            echo "<td><span class='badge archive'>Sessions: " . $row['sessions'] . "</span></td>";
+            echo "</tr>";
+        }
+    } else {
+        echo "<tr><td colspan='5'>No events found</td></tr>";
+    }
+    ?>
+  </tbody>
+</table>
+
+</body>
+</html>
+
+<?php $conn->close(); ?>
+
